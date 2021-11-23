@@ -10,20 +10,15 @@
  * by El Rabito & The Tall Man
  */
  
-private["_source","_damage"];
-_source = _this select 1;
-_damage = _this select 2;
-if !(ExilePlayerInSafezone) then
-{
-    if !(isNull _source) then
-    {
-        if !(_source == player) then
-        {
-            [_damage * 10] call BIS_fnc_bloodEffect;
-            ExileClientPlayerIsInCombat = true;
-            ExileClientPlayerLastCombatAt = diag_tickTime;
-            true call ExileClient_gui_hud_toggleCombatIcon;
-        };
+params ["_unit", "_source", "_damage"];
+
+if !(ExilePlayerInSafezone) then {
+    [_damage * 10] call BIS_fnc_bloodEffect;
+    if (!isNull _source && {_source != _unit}) then {
+        ExileClientPlayerIsInCombat = true;
+        ExileClientPlayerLastCombatAt = diag_tickTime;
+        true call ExileClient_gui_hud_toggleCombatIcon;
     };
 };
+
 true
